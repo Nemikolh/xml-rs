@@ -4,7 +4,7 @@ use std::mem;
 use std::io::prelude::*;
 
 use common;
-use common::{Error, XmlVersion, is_name_start_char, is_name_char, is_whitespace_char};
+use common::{Error, HasPosition, XmlVersion, is_name_start_char, is_name_char, is_whitespace_char};
 use name::OwnedName;
 use attribute::OwnedAttribute;
 use namespace;
@@ -73,6 +73,16 @@ impl PullParser {
             pop_namespace: false
         }
     }
+}
+
+impl HasPosition for PullParser {
+    /// Returns current row in the input document.
+    #[inline]
+    fn row(&self) -> usize { self.lexer.row() }
+
+    /// Returns current column in the document.
+    #[inline]
+    fn col(&self) -> usize { self.lexer.col() }
 }
 
 #[derive(Clone, PartialEq)]

@@ -7,6 +7,7 @@ use std::io::prelude::*;
 
 use self::parser::PullParser;
 use self::events::XmlEvent;
+use common::HasPosition;
 
 pub use self::config::ParserConfig;
 
@@ -19,6 +20,16 @@ pub mod events;
 pub struct EventReader<B: Read> {
     source: B,
     parser: PullParser
+}
+
+impl<B: Read> HasPosition for EventReader<B> {
+    /// Returns current row in the input document.
+    #[inline]
+    fn row(&self) -> usize { self.parser.row() }
+
+    /// Returns current column in the document.
+    #[inline]
+    fn col(&self) -> usize { self.parser.col() }
 }
 
 impl<B: Read> EventReader<B> {
